@@ -30,6 +30,8 @@ import androidx.navigation.NavController
 import com.dumanyusuf.pushnotifications.Screan
 import com.dumanyusuf.pushnotifications.presentation.login_view.CustomTextField
 import com.dumanyusuf.pushnotifications.util.Resource
+import com.google.gson.Gson
+import java.net.URLEncoder
 
 @Composable
 fun RegisterScrean(
@@ -38,17 +40,22 @@ fun RegisterScrean(
       navController: NavController
 ) {
 
-    var userName by remember { mutableStateOf("") }
-    var nameAndLastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var nameAndLastName by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
     val registerState=viewModel.registerState.collectAsState().value
 
-    LaunchedEffect(registerState.succsess) {
-        if(registerState.succsess) {
-            navController.navigate(Screan.HomePageScrean.route) {
-                popUpTo(Screan.RegisterScrean.route) { inclusive = true }
+    LaunchedEffect (registerState.succsess){
+        if (registerState.succsess){
+            registerState.user?.let { user ->
+                val userJson = Gson().toJson(user)
+                val encodedUser = URLEncoder.encode(userJson, "UTF-8")
+                val route = "${Screan.HomePageScrean.route}/$encodedUser"
+                navController.navigate(route) {
+                    popUpTo(Screan.RegisterScrean.route) { inclusive = true }
+                }
             }
         }
     }
@@ -61,11 +68,11 @@ fun RegisterScrean(
                 text = "Hoşgeldiniz")
 
             CustomTextField(
-                value = userName,
+                value = email,
                 onValueChange = {
-                    userName=it
+                    email = it
                 },
-                placeHolder = "Kullanıcı adınızı giriniz"
+                placeHolder = "Email adresinizi giriniz"
             )
             Spacer(Modifier.padding(10.dp))
             CustomTextField(
@@ -104,9 +111,9 @@ fun RegisterScrean(
 
             Button(
                 onClick = {
-                    viewModel.registerUser(userName, nameAndLastName)
+                    viewModel.registerUser(email, password, nameAndLastName)
                 },
-                enabled = !registerState.loading
+                enabled = !registerState.loading && email.isNotEmpty() && password.length >= 6 && nameAndLastName.isNotEmpty() && password == confirmPassword
             ) {
                 if(registerState.loading) {
                     CircularProgressIndicator(

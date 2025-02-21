@@ -11,14 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.dumanyusuf.pushnotifications.domain.model.User
 import com.dumanyusuf.pushnotifications.presentation.HomePage
 import com.dumanyusuf.pushnotifications.presentation.login_view.LoginScrean
 import com.dumanyusuf.pushnotifications.presentation.register_view.RegisterScrean
 import com.dumanyusuf.pushnotifications.ui.theme.PushNotificationsTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.URLDecoder
 
 
 @AndroidEntryPoint
@@ -42,12 +48,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PageController() {
-
     val navController=rememberNavController()
 
     NavHost(navController=navController, startDestination = Screan.LoginScrean.route){
         composable(Screan.LoginScrean.route) {
-           LoginScrean(){
+           LoginScrean(navController = navController){
                navController.navigate(Screan.RegisterScrean.route)
            }
         }
@@ -59,8 +64,15 @@ fun PageController() {
                 }
             )
         }
-        composable(Screan.HomePageScrean.route) {
-            HomePage()
+        composable(Screan.HomePageScrean.route+"/{user}",
+            arguments = listOf(
+                navArgument("user"){type= NavType.StringType}
+            )
+        ) {
+            val jsonCategory = it.arguments?.getString("user")
+            val decodedJsonCategory = URLDecoder.decode(jsonCategory, "UTF-8")
+            val user = Gson().fromJson(decodedJsonCategory,User::class.java)
+            HomePage(user)
         }
     }
 

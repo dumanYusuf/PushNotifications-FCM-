@@ -73,4 +73,6 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.52")
     kapt ("com.google.dagger:hilt-compiler:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    implementation ("com.google.code.gson:gson:2.12.1")
 }

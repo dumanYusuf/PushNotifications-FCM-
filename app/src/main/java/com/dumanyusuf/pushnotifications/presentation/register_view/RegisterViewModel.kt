@@ -23,14 +23,17 @@ class RegisterViewModel  @Inject constructor(
     val registerState:StateFlow<RegisterState> =_registerState.asStateFlow()
 
 
-    fun registerUser(userName:String,userNameAndLastName:String){
+    fun registerUser(email: String, password: String, userNameAndLastName: String) {
         viewModelScope.launch {
-            _registerState.value=RegisterState(loading = true)
-           val result= registerUseCase.registerUser(userName, userNameAndLastName)
-            when(result){
-                is Resource.Success->{
-                    _registerState.value=RegisterState(succsess = true)
-                    Log.e("basarılı","kayıt basarılı")
+            _registerState.value = RegisterState(loading = true)
+            val result = registerUseCase.registerUser(email, password, userNameAndLastName)
+            when(result) {
+                is Resource.Success -> {
+                    _registerState.value = RegisterState(
+                        succsess = true,
+                        user = result.data
+                    )
+                    Log.e("basarılı", "kayıt basarılı")
                 }
                 is Resource.Loading->{
                     _registerState.value=RegisterState(loading = true)

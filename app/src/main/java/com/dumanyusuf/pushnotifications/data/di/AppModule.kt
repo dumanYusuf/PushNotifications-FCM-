@@ -3,6 +3,7 @@ package com.dumanyusuf.pushnotifications.data.di
 import com.dumanyusuf.pushnotifications.data.repoImpl.AuthRepoImpl
 import com.dumanyusuf.pushnotifications.domain.repo.AuthRepo
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +22,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesAuthRepo(auth: FirebaseAuth):AuthRepo{
-       return AuthRepoImpl(auth)
+    fun providesAuthRepo(auth: FirebaseAuth,firebaseFirestore: FirebaseFirestore):AuthRepo{
+       return AuthRepoImpl(auth,firebaseFirestore)
     }
+
+    @Provides
+    @Singleton
+    fun  provideFirebase():FirebaseFirestore=FirebaseFirestore.getInstance()
 
 }

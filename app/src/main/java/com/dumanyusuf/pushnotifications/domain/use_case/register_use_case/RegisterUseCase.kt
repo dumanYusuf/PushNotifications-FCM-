@@ -8,8 +8,12 @@ import javax.inject.Inject
 class RegisterUseCase @Inject constructor(private val repo: AuthRepo) {
 
 
-    suspend fun registerUser(userName: String, userNameAndLastName: String): Resource<User>{
-        return repo.registerUser(userName,userNameAndLastName)
+    suspend fun registerUser(
+        email: String,
+        password: String,
+        userNameAndLastName: String
+    ): Resource<User> {
+        return repo.registerUser(email, password, userNameAndLastName)
     }
 
 }

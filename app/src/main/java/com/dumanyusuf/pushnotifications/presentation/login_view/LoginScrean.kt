@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -17,16 +19,41 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.dumanyusuf.pushnotifications.Screan
+import com.google.gson.Gson
+import java.net.URLEncoder
+import kotlin.math.log
 
 @Composable
 fun LoginScrean(
+    viewModel: LoginViewModel= hiltViewModel(),
+    navController: NavController,
     nextRegisterPage:()->Unit
 ) {
 
-    var userName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val loginState=viewModel.loginState.collectAsState().value
+
+    LaunchedEffect(loginState.succsess) {
+        if (loginState.succsess) {
+            loginState.user?.let { user ->
+                val userJson = Gson().toJson(user)
+                val encodedUser = URLEncoder.encode(userJson, "UTF-8")
+                val route = "${Screan.HomePageScrean.route}/$encodedUser"
+                navController.navigate(route) {
+                    popUpTo(Screan.LoginScrean.route) { inclusive = true }
+                }
+            }
+        }
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -37,9 +64,9 @@ fun LoginScrean(
                 text = "Hoşgeldiniz")
 
             CustomTextField(
-                value = userName,
+                value = email,
                 onValueChange = {
-                userName=it
+                email=it
             },
                 placeHolder = "Kullanıcı adınızı giriniz"
             )
@@ -52,13 +79,35 @@ fun LoginScrean(
                 placeHolder = "Şifrenizi giriniz"
             )
 
+            // Hata mesajını göster
+            if(loginState.error.isNotEmpty()) {
+                Text(
+                    text = loginState.error,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
             Button(
                 onClick = {
                     // giriş yapılacak
+                    viewModel.loginUser(email,password)
                 }
             ) {
-                Text("Giriş Yap")
+                if(loginState.loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(4.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("Kayıt ol")
+                }
             }
+
+
+
+
 
             Spacer(Modifier.padding(10.dp))
             Row (modifier = Modifier.fillMaxWidth().padding(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
