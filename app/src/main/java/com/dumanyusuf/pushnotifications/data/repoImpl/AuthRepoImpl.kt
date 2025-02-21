@@ -60,5 +60,9 @@ class AuthRepoImpl @Inject constructor(
         }
     }
 
+    override fun logOut() {
+        auth.signOut()
+    }
+
 
 }

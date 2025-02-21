@@ -48,13 +48,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun PageController() {
-    val navController=rememberNavController()
+    val navController = rememberNavController()
 
-    NavHost(navController=navController, startDestination = Screan.LoginScrean.route){
+    NavHost(
+        navController = navController,
+        startDestination = Screan.RegisterScrean.route
+    ) {
         composable(Screan.LoginScrean.route) {
-           LoginScrean(navController = navController){
-               navController.navigate(Screan.RegisterScrean.route)
-           }
+            LoginScrean(navController = navController) {
+                navController.navigate(Screan.RegisterScrean.route)
+            }
         }
         composable(Screan.RegisterScrean.route) {
             RegisterScrean(
@@ -64,16 +67,13 @@ fun PageController() {
                 }
             )
         }
-        composable(Screan.HomePageScrean.route+"/{user}",
-            arguments = listOf(
-                navArgument("user"){type= NavType.StringType}
-            )
+        composable(Screan.HomePageScrean.route + "/{user}",
+            arguments = listOf(navArgument("user") { type = NavType.StringType })
         ) {
             val jsonCategory = it.arguments?.getString("user")
             val decodedJsonCategory = URLDecoder.decode(jsonCategory, "UTF-8")
-            val user = Gson().fromJson(decodedJsonCategory,User::class.java)
-            HomePage(user)
+            val user = Gson().fromJson(decodedJsonCategory, User::class.java)
+            HomePage(user,navController)
         }
     }
-
 }

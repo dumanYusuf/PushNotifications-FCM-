@@ -101,7 +101,7 @@ fun LoginScrean(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 } else {
-                    Text("Kayıt ol")
+                    Text("Giriş yap")
                 }
             }
 
