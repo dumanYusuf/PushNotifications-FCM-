@@ -50,9 +50,11 @@ class MainActivity : ComponentActivity() {
 fun PageController() {
     val navController = rememberNavController()
 
+    val curentUser=FirebaseAuth.getInstance().currentUser
+
     NavHost(
         navController = navController,
-        startDestination = Screan.RegisterScrean.route
+        startDestination = if (curentUser!=null )Screan.HomePageScrean.route else Screan.LoginScrean.route
     ) {
         composable(Screan.LoginScrean.route) {
             LoginScrean(navController = navController) {
@@ -67,13 +69,8 @@ fun PageController() {
                 }
             )
         }
-        composable(Screan.HomePageScrean.route + "/{user}",
-            arguments = listOf(navArgument("user") { type = NavType.StringType })
-        ) {
-            val jsonCategory = it.arguments?.getString("user")
-            val decodedJsonCategory = URLDecoder.decode(jsonCategory, "UTF-8")
-            val user = Gson().fromJson(decodedJsonCategory, User::class.java)
-            HomePage(user,navController)
+        composable(Screan.HomePageScrean.route) {
+            HomePage(navController)
         }
     }
 }

@@ -35,7 +35,6 @@ import com.google.firebase.auth.FirebaseAuth
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomePage(
-    user: User,
     navController: NavController
 ) {
 
@@ -65,7 +64,7 @@ fun HomePage(
         topBar = {
             TopAppBar(title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Hoşgeldiniz  ${user.userNameAndLastName}")
+                    Text(text = "Hoşgeldiniz")
                    TextButton(onClick = { viewModel.logOut() }) {
                        Text(text = "Çıkış Yap")
                    }

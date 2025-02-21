@@ -49,15 +49,8 @@ fun RegisterScrean(
 
     LaunchedEffect (registerState.succsess){
         if (registerState.succsess){
-            registerState.user?.let { user ->
-                val userJson = Gson().toJson(user)
-                val encodedUser = URLEncoder.encode(userJson, "UTF-8")
-                val route = "${Screan.HomePageScrean.route}/$encodedUser"
-                navController.navigate(route) {
-                    popUpTo(Screan.RegisterScrean.route) { inclusive = true }
-                }
+               navController.navigate(Screan.HomePageScrean.route)
             }
-        }
     }
 
     Box(modifier = Modifier.fillMaxSize()){
