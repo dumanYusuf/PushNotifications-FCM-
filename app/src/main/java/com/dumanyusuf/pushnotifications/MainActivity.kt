@@ -2,6 +2,8 @@ package com.dumanyusuf.pushnotifications
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,6 +35,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Tüm kullanıcılar için topic'e abone ol
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("FCM", "Subscribed to all topic")
+                } else {
+                    Log.e("FCM", "Failed to subscribe to all topic", task.exception)
+                }
+            }
         setContent {
             PushNotificationsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {

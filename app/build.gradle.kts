@@ -45,6 +45,8 @@ android {
 
 dependencies {
 
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -68,6 +70,9 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-firestore")
 
+
+    // fcm
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
     // hilt
     implementation ("com.google.dagger:hilt-android:2.52")
