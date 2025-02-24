@@ -21,6 +21,7 @@ import androidx.navigation.navArgument
 import com.dumanyusuf.pushnotifications.domain.model.User
 import com.dumanyusuf.pushnotifications.presentation.HomePage
 import com.dumanyusuf.pushnotifications.presentation.login_view.LoginScrean
+import com.dumanyusuf.pushnotifications.presentation.notifications.NotificationsScrean
 import com.dumanyusuf.pushnotifications.presentation.register_view.RegisterScrean
 import com.dumanyusuf.pushnotifications.service.MyFirebaseMessagingService
 import com.dumanyusuf.pushnotifications.ui.theme.PushNotificationsTheme
@@ -85,6 +86,9 @@ fun PageController() {
         }
         composable(Screan.HomePageScrean.route) {
             HomePage(navController)
+        }
+        composable(Screan.NotificationsScrean.route) {
+            NotificationsScrean(navController)
         }
     }
 }
