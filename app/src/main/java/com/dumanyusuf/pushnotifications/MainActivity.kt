@@ -22,6 +22,7 @@ import com.dumanyusuf.pushnotifications.domain.model.User
 import com.dumanyusuf.pushnotifications.presentation.HomePage
 import com.dumanyusuf.pushnotifications.presentation.login_view.LoginScrean
 import com.dumanyusuf.pushnotifications.presentation.register_view.RegisterScrean
+import com.dumanyusuf.pushnotifications.service.MyFirebaseMessagingService
 import com.dumanyusuf.pushnotifications.ui.theme.PushNotificationsTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         
         // Tüm kullanıcılar için topic'e abone ol
         FirebaseMessaging.getInstance().subscribeToTopic("all")
