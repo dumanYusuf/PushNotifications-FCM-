@@ -78,6 +78,13 @@ fun HomePage(
             Column(modifier = Modifier
                 .fillMaxSize()
                 .padding(it)) {
+                Button(
+                    onClick = {
+                        // butona basınca bildirim olussusn
+                    }
+                ) {
+                    Text(text = "Bildirim olustur")
+                }
 
             }
         }
@@ -86,19 +93,3 @@ fun HomePage(
 
 }
 
-@Composable
-fun CustomTextField(
-    modifier: Modifier = Modifier,
-    value:String,
-    onValueChange:(String)->Unit,
-    placeholder:String
-) {
-    TextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        value=value,
-        onValueChange={onValueChange(it)},
-        placeholder = { Text(placeholder) }
-    )
-}

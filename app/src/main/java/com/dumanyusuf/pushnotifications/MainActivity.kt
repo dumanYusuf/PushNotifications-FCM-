@@ -1,8 +1,8 @@
 package com.dumanyusuf.pushnotifications
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.messaging.FirebaseMessaging
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,32 +13,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.dumanyusuf.pushnotifications.domain.model.User
 import com.dumanyusuf.pushnotifications.presentation.HomePage
 import com.dumanyusuf.pushnotifications.presentation.login_view.LoginScrean
 import com.dumanyusuf.pushnotifications.presentation.notifications.NotificationsScrean
 import com.dumanyusuf.pushnotifications.presentation.register_view.RegisterScrean
-import com.dumanyusuf.pushnotifications.service.MyFirebaseMessagingService
 import com.dumanyusuf.pushnotifications.ui.theme.PushNotificationsTheme
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import java.net.URLDecoder
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         
+        // FCM token'ı al ve logla
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d("FCM_TOKEN", "Token: $token")
+            } else {
+                Log.e("FCM_TOKEN", "Token alınamadı", task.exception)
+            }
+        }
+       // enableEdgeToEdge()
+
         // Tüm kullanıcılar için topic'e abone ol
         FirebaseMessaging.getInstance().subscribeToTopic("all")
             .addOnCompleteListener { task ->
