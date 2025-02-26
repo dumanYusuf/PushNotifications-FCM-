@@ -12,6 +12,7 @@ import com.dumanyusuf.pushnotifications.R
 import com.dumanyusuf.pushnotifications.domain.model.NotificationModel
 import com.dumanyusuf.pushnotifications.domain.use_case.saved_notifications_use_case.SavedNotificationsUseCase
 import com.google.firebase.Timestamp
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.Event.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
@@ -69,8 +70,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-
         val notification = NotificationCompat.Builder(this, "FCM_CHANNEL")
             .setContentTitle(title)
             .setContentText(message)
